@@ -30,13 +30,17 @@ Create Collection "users"
 ```
 db.createCollection("users")
 ```
+Exit from DB
+```
+exit
+```
 
 ## Get the Code
 
 ```
 git clone https://github.com/techizone-Medium-Project-org/Python-3-tier-UMS-App.git
 cd Python-3-tier-UMS-App
-sudo chown -R ec2-user:ec2-user /home/ec2-user/My-python-EMS
+sudo chown -R ec2-user:ec2-user /home/ec2-user/Python-3-tier-UMS-App
 ```
 Switch branch
 
@@ -64,7 +68,6 @@ pip install -r requirements.txt
 ```
 Start Backend Application
 ```
-python3 manage.py migrate
 pip install gunicorn
 gunicorn --bind 0.0.0.0:5000 app:app
 ```
@@ -92,7 +95,14 @@ Setup "nginx.conf" for reverse Proxy to backend, we already have "nginx.conf" fi
 
 ```
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-sudo mv /home/ec2-user/My-python-EMS/frontend/nginx.conf /etc/nginx/
+sudo mv /home/ec2-user/Python-3-tier-UMS-App/frontend/nginx.conf /etc/nginx/
+```
+Edit your the Backend IP Address in nginx.conf
+```
+sudo vim /etc/nginx/nginx.conf
+```
+restart your Nginx
+```
 sudo systemctl restart nginx
 ```
 
