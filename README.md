@@ -1,5 +1,6 @@
-# DB-Tier Setup
+## Please Install the Required Tools for these Project refer "setup.md"
 
+# DB-Tier Setup
 Login to DB
 ```
 mongosh
@@ -108,6 +109,9 @@ sudo rm -rf /var/www/frontend/*
 sudo mv build/* /var/www/frontend/
 sudo systemctl restart nginx
 ```
+<img width="1321" height="320" alt="image" src="https://github.com/user-attachments/assets/3665c884-c433-4b27-9f9c-cd8abf088ab9" />
+<img width="827" height="624" alt="image" src="https://github.com/user-attachments/assets/721b013e-3063-47b0-9e8b-ff6abcc83dff" />
+
 
 
 
