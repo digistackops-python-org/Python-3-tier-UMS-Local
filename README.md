@@ -13,7 +13,7 @@ Create  application's database "user-account"
 ```
 use user-account
 ```
-Create a user with read/write access to the 'user-account' database
+Create a user "appuser" with read/write access to the 'user-account' database
 ```
 db.createUser({
   user: "appuser",
@@ -28,271 +28,87 @@ Create Collection "users"
 db.createCollection("users")
 ```
 
-# Server B (Backend)
-### Install python
-```
-sudo yum update -y
-sudo yum install git -y
-sudo yum install python3 -y
-sudo yum install python3-pip -y
-```
-
-git clone 
+## Get the Code
 
 ```
-git clone https://github.com/sapsecops/My-python-EMS.git
-cd My-python-EMS
+git clone https://github.com/techizone-Medium-Project-org/Python-3-tier-UMS-App.git
+cd Python-3-tier-UMS-App
+sudo chown -R ec2-user:ec2-user /home/ec2-user/My-python-EMS
+```
+Switch branch
+
+```
+git checkout 01-Local-setup-Dev
+```
+# Backend Setup
+```
+cd backend
+```
+Create connection file ".env" for DB connection
+
+```
+sudo vim .env
 ```
 ```
-python3 -m venv venv
-source venv/bin/activate
+MONGO_USER=appuser
+MONGO_PASS=Pa55Word
+MONGO_HOST=your_db_private_ip
+MONGO_DB=user-account
+```
+Install Dependencies
+```
 pip install -r requirements.txt
-python3 manage.py makemigrations employees
+```
+Start Backend Application
+```
 python3 manage.py migrate
 pip install gunicorn
-gunicorn employee_backend.wsgi:application --bind 0.0.0.0:8000
+gunicorn --bind 0.0.0.0:5000 app:app
 ```
-# Server A (Frontend)
+# Frontend Setup
+Note => Nginx we we for 2 purpose 
+        (1) For Frontend Load Balancing 
+        (2) For Backend Reverse Proxy
 
-### Install Node.js
-```
-sudo yum install git -y
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-. ~/.nvm/nvm.sh
-nvm install 16
-```
-
-```
-cd frontend
-sudo chown -R ec2-user:ec2-user /home/ec2-user/My-python-EMS
-npm install
-```
-
-Install nginx 
+Install nginx
 ```
 sudo yum install nginx -y
 ```
-1️⃣ Create public/index.html
-
-Create public folder if it doesn’t exist:
-
-mkdir -p public
-
-
-Then create index.html:
+Start the Service
 ```
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Employee Frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
-</html>
+sudo systemctl start nginx
+sudo systemctl enable nginx
 ```
+Create Frontend Directory
+```
+sudo mkdir -p /var/www/frontend/
+sudo chmod -R 755 /var/www/frontend/
+```
+
+Setup "nginx.conf" for reverse Proxy to backend, we already have "nginx.conf" file 
+
+```
+sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+sudo mv /home/ec2-user/My-python-EMS/frontend/nginx.conf /etc/nginx/
+sudo systemctl restart nginx
+```
+
+Install Dependencies
+```
+cd frontend
+npm install
+```
+Build the Frontend 
 ```
 npm run build
 ```
 Copy build/ to /var/www/html or Nginx root
 ```
-sudo rm -rf /usr/share/nginx/html/*
-sudo cp -r build/* /usr/share/nginx/html/
+sudo rm -rf /var/www/frontend/*
+sudo mv build/* /var/www/frontend/
 sudo systemctl restart nginx
 ```
 
 
-# use Nginx for Backend and Frontend
-
-2️⃣ Server B — Backend (Django API)
-
-We’ll run Django with Gunicorn behind Nginx.
-
-Gunicorn service /etc/systemd/system/gunicorn.service
-
-```
-sudo vim /etc/systemd/system/gunicorn.service
-```
-```
-[Unit]
-Description=Gunicorn instance to serve Django
-After=network.target
-
-[Service]
-User=www-data
-Group=www-data
-WorkingDirectory=/opt/employee-app/backend
-ExecStart=/usr/bin/gunicorn --workers 3 --bind unix:/opt/employee-app/backend/gunicorn.sock backend.wsgi:application
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Nginx config /etc/nginx/sites-available/backend
-
-```
-sudo vim /etc/nginx/sites-available/backend
-```
-
-```
-server {
-    listen 80;
-    server_name backend-server-domain;
-
-    location / {
-        include proxy_params;
-        proxy_pass http://unix:/opt/employee-app/backend/gunicorn.sock;
-    }
-
-    location /media/ {
-        alias /opt/employee-app/backend/media/;
-    }
-
-    location /static/ {
-        alias /opt/employee-app/backend/static/;
-    }
-}
-```
-
-Enable and restart:
-
-```
-sudo ln -s /etc/nginx/sites-available/backend /etc/nginx/sites-enabled
-sudo systemctl restart nginx
-sudo systemctl enable gunicorn
-```
 
 
-3️⃣ Server A — Frontend (React build)
-
-Nginx config /etc/nginx/sites-available/frontend
-
-```
-sudo vim /etc/nginx/sites-available/frontend
-```
-```
-server {
-    listen 80;
-    server_name frontend-server-domain;
-
-    root /var/www/employee-frontend;
-    index index.html;
-
-    location / {
-        try_files $uri /index.html;
-    }
-
-    # Allow CORS to call backend API
-    location /api/ {
-        proxy_pass http://backend-server-domain/api/;
-        add_header Access-Control-Allow-Origin *;
-        add_header Access-Control-Allow-Methods 'GET, POST, PUT, DELETE, OPTIONS';
-        add_header Access-Control-Allow-Headers 'Content-Type, Authorization';
-    }
-}
-```
-
-Deploy React build:
-
-```
-npm run build
-sudo mkdir -p /var/www/employee-frontend
-sudo cp -r build/* /var/www/employee-frontend/
-```
-
-Final DNS/Connection Setup
-
-Frontend calls backend via config.js:
-
-```
-const config = {
-  API_BASE_URL: "http://backend-server-domain/api"
-};
-```
-
-Backend connects to MongoDB in config.py:
-
-```
-MONGO_DB_CONFIG = {
-    "HOST": "mongodb://mongo_user:StrongPassword123@mongo-server-ip:27017/employeedb",
-    "NAME": "employeedb"
-```
-
-# Docker
-
-### Docker Backend
-
-Dockerfile
-```
-# Use official Python image as base
-FROM python:3.11-slim
-
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Set work directory
-WORKDIR /app
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
-COPY requirements.txt /app/
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-# Copy project
-COPY . /app/
-
-# Copy your environment variables (optional)
-# COPY .env /app/
-
-# Expose port 8000
-EXPOSE 8000
-
-# Run migrations and start server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
-```
-.dockerignore
-```
-__pycache__
-*.pyc
-*.pyo
-*.pyd
-*.sqlite3
-env
-venv
-.env
-build
-dist
-*.egg-info
-```
-Environment Variable Configuration
-Create .env.sample file (not checked into source control) for MongoDB parameters:
-```
-MONGO_USER=appuser
-MONGO_PASS=pa55Word
-MONGO_HOST=AWS-DB-Private-IP
-MONGO_DB=employeedb
-```
-Build the image:
-```
-docker build -t employee-backend:latest 
-```
-
-Run the container passing environment variables:
-
-```
-docker run -d -p 8000:8000 \
-  -e MONGO_USER=appuser \
-  -e MONGO_PASS=pa55Word \
-  -e MONGO_HOST=AWS-DB-Private-IP \
-  -e MONGO_DB=employeedb \
-  --name employee-backend employee-backend:latest
-```

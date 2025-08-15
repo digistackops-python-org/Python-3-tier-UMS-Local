@@ -50,6 +50,24 @@ mongodb://<your-AWS-Public-IP>:27017
 ```
 
 
+# Backend-Python Application server
+Install python
+```
+sudo yum update -y
+sudo yum install git -y
+sudo yum install python3 -y
+sudo yum install python3-pip -y
+```
+# Frontrnd-React Web server
+
+### Install Node.js
+```
+sudo yum install git -y
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+. ~/.nvm/nvm.sh
+nvm install 16
+```
+
 
 
 # Backend
@@ -62,9 +80,9 @@ Clone your backend code repository.
 
 Create the .env file and fill it with the DB instance's Private IP and credentials.
 
-Install dependencies: pip install -r requirements.txt.
+Install dependencies: .
 
-Run the app using a production server like Gunicorn: gunicorn --bind 0.0.0.0:5000 app:app.
+Run the app using a production server like Gunicorn: .
 
 ```
 
