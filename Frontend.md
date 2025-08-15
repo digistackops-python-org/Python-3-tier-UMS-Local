@@ -23,6 +23,23 @@ Create Frontend Directory
 sudo mkdir -p /var/www/frontend/
 sudo chmod -R 755 /var/www/frontend/
 ```
+## Get the Code
+
+```
+git clone https://github.com/techizone-Medium-Project-org/Python-3-tier-UMS-App.git
+sudo chown -R ec2-user:ec2-user /home/ec2-user/Python-3-tier-UMS-App
+cd Python-3-tier-UMS-App
+```
+Switch branch
+
+```
+git checkout 02-Local-setup-Prod
+```
+# Backend Setup
+```
+cd frontend
+```
+
 Note => Nginx we we for 2 purpose 
         (1) For Frontend Load Balancing 
         (2) For Backend Reverse Proxy
