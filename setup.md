@@ -1,5 +1,3 @@
-# DB Installation
-
 # DB Tier
 
 # Install Mongo DB
