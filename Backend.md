@@ -14,6 +14,7 @@ sudo yum install python3-pip -y
 ```
 git clone https://github.com/techizone-Medium-Project-org/Python-3-tier-UMS-App.git
 sudo chown -R ec2-user:ec2-user /home/ec2-user/Python-3-tier-UMS-App
+cd Python-3-tier-UMS-App
 ```
 Switch branch
 
@@ -22,7 +23,7 @@ git checkout 02-Local-setup-Prod
 ```
 # Backend Setup
 ```
-cd Python-3-tier-UMS-App/backend
+cd backend
 ```
 Create connection file ".env" for DB connection
 Dont push ".env" to your SCM for security 
