@@ -1,34 +1,31 @@
+# DB-Tier Setup
 
-### Using Mongo-Compose create DB "employeedb" and Collection "employee"
-
-
-
-
-
-### Login to your mongoDB and Create application user
+Login to DB
 ```
 mongosh
 ```
-### switch to admin user
-
+Connect to the admin database to create a user
 ```
 use admin
 ```
-### switch to employeedb DB
 
+Create  application's database "user-account"
 ```
-use employeedb
+use user-account
 ```
-### Create Application User
-
+Create a user with read/write access to the 'user-account' database
 ```
 db.createUser({
   user: "appuser",
-  pwd: "pa55Word",
+  pwd: "Pa55Word",
   roles: [
-    { role: "readWrite", db: "employeedb" }
+    { role: "readWrite", db: "user-account" }
   ]
 });
+```
+Create Collection "users"
+```
+db.createCollection("users")
 ```
 
 # Server B (Backend)
