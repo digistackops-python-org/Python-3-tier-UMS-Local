@@ -1,7 +1,7 @@
-# DB Tier
-
-# Install Mongo DB
 ## Launch EC2 "t2.micro" Instance and In Sg, Open port "27017" for MongoDB
+# DB Tier
+# Install Mongo DB
+
 ### Create mondDB repo in YUM repository
 ```
 sudo vim /etc/yum.repos.d/mongodb-org-8.0.repo
@@ -49,37 +49,35 @@ sudo systemctl restart mongod
 mongodb://<your-AWS-Public-IP>:27017
 ```
 
+# DB-Tier Setup
+Login to DB
+```
+mongosh
+```
+Connect to the admin database to create a user
+```
+use admin
+```
 
-# Backend-Python Application server
-Install python
+Create  application's database "user-account"
 ```
-sudo yum update -y
-sudo yum install git -y
-sudo yum install python3 -y
-sudo yum install python3-pip -y
+use user-account
 ```
-# Frontrnd-React Web server
-
-### Install Node.js
+Create a user "appuser" with read/write access to the 'user-account' database
 ```
-sudo yum install git -y
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-. ~/.nvm/nvm.sh
-nvm install 16
+db.createUser({
+  user: "appuser",
+  pwd: "Pa55Word",
+  roles: [
+    { role: "readWrite", db: "user-account" }
+  ]
+});
 ```
-### Install Nginx
-
-Install nginx
+Create Collection "users"
 ```
-sudo yum install nginx -y
+db.createCollection("users")
 ```
-Start the Service
+Exit from DB
 ```
-sudo systemctl start nginx
-sudo systemctl enable nginx
-```
-Create Frontend Directory
-```
-sudo mkdir -p /var/www/frontend/
-sudo chmod -R 755 /var/www/frontend/
+exit
 ```
