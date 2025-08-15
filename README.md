@@ -76,21 +76,6 @@ Note => Nginx we we for 2 purpose
         (1) For Frontend Load Balancing 
         (2) For Backend Reverse Proxy
 
-Install nginx
-```
-sudo yum install nginx -y
-```
-Start the Service
-```
-sudo systemctl start nginx
-sudo systemctl enable nginx
-```
-Create Frontend Directory
-```
-sudo mkdir -p /var/www/frontend/
-sudo chmod -R 755 /var/www/frontend/
-```
-
 Setup "nginx.conf" for reverse Proxy to backend, we already have "nginx.conf" file 
 
 ```
