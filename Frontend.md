@@ -61,7 +61,6 @@ sudo systemctl restart nginx
 ### Frontend Setup
 Install Dependencies
 ```
-cd frontend
 npm install
 ```
 Build the Frontend 
