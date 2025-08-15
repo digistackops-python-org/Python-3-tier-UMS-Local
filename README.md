@@ -1,4 +1,4 @@
-## Please Install the Required Tools for these Project refer "setup.md"
+## prerequisite => Install the Required Tools for these Project refer "setup.md"
 
 # DB-Tier Setup
 Login to DB
