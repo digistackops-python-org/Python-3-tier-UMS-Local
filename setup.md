@@ -67,3 +67,19 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 . ~/.nvm/nvm.sh
 nvm install 16
 ```
+### Install Nginx
+
+Install nginx
+```
+sudo yum install nginx -y
+```
+Start the Service
+```
+sudo systemctl start nginx
+sudo systemctl enable nginx
+```
+Create Frontend Directory
+```
+sudo mkdir -p /var/www/frontend/
+sudo chmod -R 755 /var/www/frontend/
+```
