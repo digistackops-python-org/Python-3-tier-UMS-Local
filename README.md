@@ -71,29 +71,18 @@ Start Backend Application
 pip install gunicorn
 gunicorn --bind 0.0.0.0:5000 app:app
 ```
+
 # Frontend Setup
-Note => Nginx we we for 2 purpose 
-        (1) For Frontend Load Balancing 
-        (2) For Backend Reverse Proxy
-
-Setup "nginx.conf" for reverse Proxy to backend, we already have "nginx.conf" file 
-
+Setup Backend Connection => add your Backend Public IP
 ```
-sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-sudo mv /home/ec2-user/Python-3-tier-UMS-App/frontend/nginx.conf /etc/nginx/
+cd frontend
 ```
-Edit your the Backend IP Address in nginx.conf
 ```
-sudo vim /etc/nginx/nginx.conf
-```
-restart your Nginx
-```
-sudo systemctl restart nginx
+sudo vim src/config.js
 ```
 
 Install Dependencies
 ```
-cd frontend
 npm install
 ```
 Build the Frontend 
