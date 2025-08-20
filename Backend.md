@@ -25,7 +25,7 @@ Step:2 ==> Execute your "init.sql" script for your Application DB setup
 
 ```
 cd backend
-mongosh "mongodb://<username>:<password>@<host>:27017/<database>" < init.js
+mongosh "mongodb://<DB-Private-IP>:27017/admin" < init.js
 ``` 
 
 ## Install python
