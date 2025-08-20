@@ -1,4 +1,4 @@
-use user-account
+use user-account;
 
 db.createUser({
   user: "appuser",
