@@ -26,7 +26,8 @@ Step:2 ==> Execute your "init.sql" script for your Application DB setup
 ```
 cd backend
 mongosh "mongodb://<DB-Private-IP>:27017/admin" < init.js
-``` 
+```
+why We use admin DB HERE => because we just launch Mongo DB so no other DB and users in DB
 
 ## Install python
 ```
