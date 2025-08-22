@@ -48,7 +48,7 @@ sudo yum install -y mongodb-mongosh
 Step:2 ==> Execute your "init.sql" script for your Application DB setup
 
 ```
-mongosh "mongodb://<DB-Private-IP>:27017/admin" < init.js
+mongosh "mongodb://<DB-Private-IP>:27017/admin" < initdb.js
 ```
 Create connection file ".env" for DB connection
 Dont push ".env" to your SCM for security 
@@ -86,7 +86,7 @@ After=network.target
 [Service]
 User=ec2-user
 Group=ec2-user
-WorkingDirectory=/home/ec2-user/My-python-EMS/backend
+WorkingDirectory=/home/ec2-user/Python-3-tier-UMS-Local/backend
 ExecStart=/usr/local/bin/gunicorn --bind 0.0.0.0:5000 app:app
 Restart=always
 
