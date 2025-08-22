@@ -48,7 +48,6 @@ sudo yum install -y mongodb-mongosh
 Step:2 ==> Execute your "init.sql" script for your Application DB setup
 
 ```
-cd backend
 mongosh "mongodb://<DB-Private-IP>:27017/admin" < init.js
 ```
 Create connection file ".env" for DB connection
