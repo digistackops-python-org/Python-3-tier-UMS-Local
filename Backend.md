@@ -1,6 +1,30 @@
 ## Launch EC2 "t2.micro" Instance and In Sg, Open port "5000" for Python Application 
 # Backend-Python Application server
 
+## Install python
+```
+sudo yum update -y
+sudo yum install git -y
+sudo yum install python3 -y
+sudo yum install python3-pip -y
+```
+
+## Get the Code
+
+```
+git clone https://github.com/digistackops-python-org/Python-3-tier-UMS-Local.git
+sudo chown -R ec2-user:ec2-user /home/ec2-user/Python-3-tier-UMS-Local
+cd Python-3-tier-UMS-Local
+```
+Switch branch
+
+```
+git checkout 02-Local-setup-Prod
+```
+# Backend Setup
+```
+cd backend
+```
 ## Setup your Application Database by executing "initdb.js" script from Application-server
 
 Step:1 ==> install "mongo-Client" for communicate with Mongo Database
@@ -26,32 +50,6 @@ Step:2 ==> Execute your "init.sql" script for your Application DB setup
 ```
 cd backend
 mongosh "mongodb://<DB-Private-IP>:27017/admin" < init.js
-```
-why We use admin DB HERE => because we just launch Mongo DB so no other DB and users in DB
-
-## Install python
-```
-sudo yum update -y
-sudo yum install git -y
-sudo yum install python3 -y
-sudo yum install python3-pip -y
-```
-
-## Get the Code
-
-```
-git clone https://github.com/techizone-Medium-Project-org/Python-3-tier-UMS-App.git
-sudo chown -R ec2-user:ec2-user /home/ec2-user/Python-3-tier-UMS-App
-cd Python-3-tier-UMS-App
-```
-Switch branch
-
-```
-git checkout 02-Local-setup-Prod
-```
-# Backend Setup
-```
-cd backend
 ```
 Create connection file ".env" for DB connection
 Dont push ".env" to your SCM for security 
