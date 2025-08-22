@@ -1,4 +1,4 @@
-use user-account;
+use admin;
 
 db.createUser({
   user: "appuser",
@@ -8,4 +8,5 @@ db.createUser({
   ]
 });
 
+use user-account;
 db.createCollection("users")
