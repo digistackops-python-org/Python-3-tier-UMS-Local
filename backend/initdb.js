@@ -1,12 +1,10 @@
-use admin;
-
+use user-account
 db.createUser({
   user: "appuser",
   pwd: "Pa55Word",
-  roles: [
-    { role: "readWrite", db: "user-account" }
-  ]
-});
+  roles: [{ role: "readWrite", db: "user-account" }]
+})
 
-use user-account;
+
 db.createCollection("users")
+
