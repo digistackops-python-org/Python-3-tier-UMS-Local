@@ -51,6 +51,7 @@ Note ==> we already setup the Reverse Proxy using Nginx alredy setup "nginx.conf
 ### Setup "nginx.conf" for reverse Proxy to backend, we already have "nginx.conf" file 
 
 ```
+cd frontend
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
 sudo mv /home/ec2-user/Python-3-tier-UMS-Local/frontend/nginx.conf /etc/nginx/
 ```
@@ -60,6 +61,7 @@ sudo vim /etc/nginx/nginx.conf
 ```
 restart your Nginx
 ```
+sudo nginx -t
 sudo systemctl restart nginx
 ```
 ### Frontend Setup
