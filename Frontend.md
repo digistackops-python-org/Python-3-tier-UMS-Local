@@ -52,7 +52,7 @@ Note ==> we already setup the Reverse Proxy using Nginx alredy setup "nginx.conf
 
 ```
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-sudo mv /home/ec2-user/Python-3-tier-UMS-App/frontend/nginx.conf /etc/nginx/
+sudo mv /home/ec2-user/Python-3-tier-UMS-Local/frontend/nginx.conf /etc/nginx/
 ```
 Edit your the Backend IP Address in nginx.conf
 ```
