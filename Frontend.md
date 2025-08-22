@@ -26,9 +26,9 @@ sudo chmod -R 755 /var/www/frontend/
 ## Get the Code
 
 ```
-git clone https://github.com/techizone-Medium-Project-org/Python-3-tier-UMS-App.git
-sudo chown -R ec2-user:ec2-user /home/ec2-user/Python-3-tier-UMS-App
-cd Python-3-tier-UMS-App
+git clone https://github.com/digistackops-python-org/Python-3-tier-UMS-Local.git
+sudo chown -R ec2-user:ec2-user /home/ec2-user/Python-3-tier-UMS-Local
+cd Python-3-tier-UMS-Local
 ```
 Switch branch
 
