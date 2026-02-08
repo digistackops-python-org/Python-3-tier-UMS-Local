@@ -1,9 +1,9 @@
 
 # stage:1 - Dev Stage [in Dev Env]
 
-## Step-1 - Run the Test cases
+### Step-1 - Run the Test cases
 
-### Install Test Dependencies for testing
+#### Install Test Dependencies for testing
 ```
 pip install pytest pytest-mock mongomock flask-testing
 ```
@@ -18,7 +18,7 @@ pytest tests/test_unit.py
 pytest tests/test_integration.py
 ```
 
-## Step:2 - Run Sonar Scan [sonarQube]
+#### Step:2 - Run Sonar Scan [sonarQube]
 ```
 sonar-scanner \
   -Dsonar.projectKey=employee-backend \
@@ -28,7 +28,7 @@ sonar-scanner \
 
 ```
 
-## Step:3 - Create Release Artifact [Nexus]
+#### Step:3 - Create Release Artifact [Nexus]
 
 Create release Artifact 
 ```
@@ -45,7 +45,7 @@ curl -u nexususer:nexuspass \
 
 # stage:2 - QA Stage [in QA Env]
 
-## Step-1 - Download Artifact from Nexus
+#### Step-1 - Download Artifact from Nexus
 
 ```
 cd /opt/backend/releases
@@ -53,7 +53,7 @@ curl -u nexususer:nexuspass -O \
   http://nexus.mycompany.local:8081/repository/backend-releases/backend-1.0.3.tar.gz
 ```
 
-## Step-2 - Deploy to QA 
+#### Step-2 - Deploy to QA 
 
 ```
 cd /opt/backend
@@ -63,7 +63,7 @@ pip install -r app/requirements.txt
 sudo systemctl restart backend
 ```
 
-## Step 3 – Run Test Cases (QA Manual + Automated)
+#### Step 3 – Run Test Cases (QA Manual + Automated)
 ```
 pytest app/tests/test_integration.py
 ```
@@ -111,7 +111,7 @@ Maintenance window
 Rollback plan documented
 ```
 
-## Step-1 - Deploy to Prod 
+#### Step-1 - Deploy to Prod 
 ```
 cd /opt/backend/releases
 curl -u nexususer:nexuspass -O \
@@ -130,7 +130,7 @@ sudo systemctl restart backend
 sudo systemctl status backend
 ```
 
-## Step-2 - Smoke Test in Production
+#### Step-2 - Smoke Test in Production
 ```
 curl http://prod-server:5000/health
 curl http://prod-server:5000/api/employees
