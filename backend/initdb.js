@@ -1,13 +1,19 @@
-use user-account
+// Switch DB properly (hyphenated DB name)
+var db = db.getSiblingDB("user-account");
+
+// Create application user
 db.createUser({
   user: "appuser",
   pwd: "Pa55Word",
-  roles: [{ role: "readWrite", db: "user-account" }]
-})
+  roles: [
+    { role: "readWrite", db: "user-account" }
+  ]
+});
 
+// Create collection
+db.createCollection("users");
 
-db.createCollection("users")
-
+// Insert seed data
 db.users.insertMany([
   {
     name: "venkatesh",
@@ -39,4 +45,6 @@ db.users.insertMany([
     designation: "Manager",
     salary: 1300000
   }
-])
+]);
+
+print("✅ Database user-account initialized successfully");

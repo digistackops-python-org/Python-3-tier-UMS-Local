@@ -1,7 +1,7 @@
 
 # Install Test Dependencies for testing
 ```
-pip install pytest pytest-mock mongomock flask-testing
+pip install -r requirements-test.txt
 ```
 
 
@@ -12,11 +12,13 @@ pip install pytest pytest-mock mongomock flask-testing
 we run Unut Test in Dev Environment servers
 ### Run the Unit test Cases
 ```
-pytest tests/test_unit.py
+pytest tests/unit/test_unit.py
 ```
 
 
 #### Step:2 - Run Sonar Scan [sonarQube]
+
+Without Unit Test Coverage
 ```
 sonar-scanner \
   -Dsonar.projectKey=employee-backend \
@@ -24,6 +26,21 @@ sonar-scanner \
   -Dsonar.host.url=http://sonar.mycompany.local:9000 \
   -Dsonar.login=SONAR_TOKEN
 
+```
+
+With Unit Test Coverage
+```
+sonar-scanner \
+  -Dsonar.projectKey=employee-backend \
+  -Dsonar.sources=. \
+  -Dsonar.tests=tests \
+  -Dsonar.test.inclusions=tests/unit/** \
+  -Dsonar.python.coverage.reportPaths=coverage.xml
+
+```
+Generate the Test Coverage XML Report 
+```
+pytest tests/unit --cov=app --cov-report=xml
 ```
 
 #### Step:3 - Create Release Artifact [Nexus]
@@ -66,7 +83,7 @@ sudo systemctl restart backend
 we run Integration Test in QA Environment servers
 ### Run the Integration test Cases
 ```
-pytest tests/test_integration.py
+pytest tests/integration/test_integration.py
 ```
 
 ### Run the e2e test Cases
