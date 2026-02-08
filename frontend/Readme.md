@@ -1,7 +1,10 @@
-
-# Install Test Dependencies for testing
+#### Install Test Dependencies for testing
 ```
-pip install pytest pytest-mock mongomock flask-testing
+npm install --save-dev \
+@testing-library/react \
+@testing-library/jest-dom \
+@testing-library/user-event \
+jest-environment-jsdom
 ```
 
 
@@ -9,64 +12,88 @@ pip install pytest pytest-mock mongomock flask-testing
 
 ### Step-1 - Run the Test cases
 
-we run Unut Test in Dev Environment servers
-### Run the Unit test Cases
+
+we Run the Unit test Cases in dev environment Servers
 ```
-pytest tests/test_unit.py
+npm run test:unit
+```
+
+Unit test Coverage only 
+```
+npm run test:unit -- --coverage
 ```
 
 
 #### Step:2 - Run Sonar Scan [sonarQube]
 ```
 sonar-scanner \
-  -Dsonar.projectKey=employee-backend \
-  -Dsonar.sources=app \
-  -Dsonar.host.url=http://sonar.mycompany.local:9000 \
-  -Dsonar.login=SONAR_TOKEN
+  -Dsonar.projectKey=employee-frontend \
+  -Dsonar.sources=src \
+  -Dsonar.tests=src \
+  -Dsonar.test.inclusions=**/*.unit.test.js \
+  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
 ```
 
 #### Step:3 - Create Release Artifact [Nexus]
 
+Build the Artifact
+```
+npm run build
+```
+
 Create release Artifact 
 ```
-VERSION=1.0.3
-tar -czf backend-${VERSION}.tar.gz app requirements.txt initdb.js
+zip -r frontend-1.0.0.zip build/
 ```
 
 upload to Nexus
 ```
 curl -u nexususer:nexuspass \
-  --upload-file backend-1.0.3.tar.gz \
-  http://nexus.mycompany.local:8081/repository/backend-releases/backend-1.0.3.tar.gz
+  --upload-file frontend-1.0.0.zip \
+  http://nexus.mycompany.local:8081/repository/frontend-releases/frontend-1.0.0.zip
 ```
 
 # stage:2 - QA Stage [in QA Env]
 
 #### Step-1 - Download Artifact from Nexus
 
+Downlod the Artifact from Repo
 ```
-cd /opt/backend/releases
+cd /opt/frontend/releases
 curl -u nexususer:nexuspass -O \
-  http://nexus.mycompany.local:8081/repository/backend-releases/backend-1.0.3.tar.gz
+  http://nexus.mycompany.local:8081/repository/frontend-releases/frontend-1.0.0.zip
 ```
+
 
 #### Step-2 - Deploy to QA 
 
+Unzip the Repo
 ```
-cd /opt/backend
-tar -xzf releases/backend-1.0.3.tar.gz -C app
-source venv/bin/activate
-pip install -r app/requirements.txt
-sudo systemctl restart backend
+unzip frontend-1.0.0.zip
+```
+
+Switch Release
+```
+ln -sfn /opt/apps/frontend/releases/build /opt/apps/frontend/current
+
+```
+
+Reload Nginx
+```
+systemctl reload nginx
 ```
 
 #### Step 3 – Run Test Cases (QA Manual + Automated)
 
-we run Integration Test in QA Environment servers
-### Run the Integration test Cases
+we Run the Integration test Cases in QA environment Servers
 ```
-pytest tests/test_integration.py
+npm run test:integration
+```
+
+Integration test Coverage only 
+```
+npm run test:integration -- --coverage
 ```
 
 ### Run the e2e test Cases
@@ -118,25 +145,33 @@ Maintenance window
 Rollback plan documented
 ```
 
-#### Step-1 - Deploy to Prod 
+#### Step-1 - Download Artifact from Nexus
+
+Downlod the Artifact from Repo
 ```
-cd /opt/backend/releases
+cd /opt/frontend/releases
 curl -u nexususer:nexuspass -O \
-  http://nexus.mycompany.local:8081/repository/backend-releases/backend-1.0.3.tar.gz
-
-
-// create the folder for the Current Version
-
-cd /opt/backend
-ln -sfn releases/backend-1.0.3 current
-
-source venv/bin/activate
-pip install -r current/requirements.txt
-
-sudo systemctl restart backend
-sudo systemctl status backend
+  http://nexus.mycompany.local:8081/repository/frontend-releases/frontend-1.0.0.zip
 ```
 
+
+#### Step-2 - Deploy to Prod 
+
+Unzip the Repo
+```
+unzip frontend-1.0.0.zip
+```
+
+Switch Release
+```
+ln -sfn /opt/apps/frontend/releases/build /opt/apps/frontend/current
+
+```
+
+Reload Nginx
+```
+systemctl reload nginx
+```
 #### Step-2 - Smoke Test in Production
 ```
 curl http://prod-server:5000/health
@@ -152,6 +187,6 @@ HERE we test the Deployment is Succes or Not working fine or Not
 # If Fail ==> need to Rollback 
 
 ```
-ln -sfn releases/backend-1.0.2 current
+ln -sfn releases/frontend-1.0.0 current
 sudo systemctl restart backend
 ```
